@@ -1,0 +1,15 @@
+# Node Packages
+node_modules
+
+# Manifest Files
+package-lock.json
+
+# Environment Files
+.env
+.env.local
+.env.prod
+
+# Build Dirs
+dist/
+cache/
+test/
