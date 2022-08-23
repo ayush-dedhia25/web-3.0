@@ -13,6 +13,7 @@ function getEthereumContract() {
 
 function TransactionProvider({ children }) {
    const [currentAccount, setCurrentAccount] = useState();
+   const [transactions, setTransactions] = useState([]);
    const [formData, setFormData] = useState({ addressTo: '', amount: '', keyword: '', message: '' });
    const [isLoading, setIsLoading] = useState(false);
    const [transactionCount, setTransactionCount] = useState(localStorage.getItem('transactionCount'));
@@ -25,6 +26,15 @@ function TransactionProvider({ children }) {
          }
          const transactionContract = getEthereumContract();
          const availableTransactions = await transactionContract.getAllTransactions();
+         const structuredTransactions = availableTransactions.map((transaction) => ({
+            addressTo: transaction.receiver,
+            addressFrom: transaction.sender,
+            timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
+            message: transaction.message,
+            keyword: transaction.keyword,
+            amount: parseInt(transaction.amount._hex) / (10 ** 18),
+         }));
+         setTransactions(structuredTransactions);
       } catch (err) {
          console.log(err);
          throw new Error('No Ethereum Object');
@@ -44,6 +54,7 @@ function TransactionProvider({ children }) {
          const accounts = await window.ethereum.request({ method: 'eth_accounts' });
          if (accounts.length) {
             setCurrentAccount(accounts[0]);
+            getAllTransactions();
          } else {
             console.log('No Accounts Found!');
          }
@@ -100,6 +111,7 @@ function TransactionProvider({ children }) {
          
          const transactionsCount = await transactionContract.getTransactionCount();
          setTransactionCount(transactionsCount.toNumber());
+         window.reload();
       } catch (err) {
          console.log(err);
          throw new Error('No Ethereum Object');
@@ -118,8 +130,8 @@ function TransactionProvider({ children }) {
    };
    
    useEffect(() => {
-      //checkIfWalletConnected();
-      //checkIfTransactionsExists();
+      checkIfWalletConnected();
+      checkIfTransactionsExists();
    }, []);
    
    const state = {
@@ -129,6 +141,8 @@ function TransactionProvider({ children }) {
       setFormData,
       handleChange,
       sendTransaction,
+      transactions,
+      isLoading
    };
    
    return (

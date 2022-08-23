@@ -5,7 +5,7 @@ import shortenAddress from '../utils/shortenAddress';
 import useFetch from '../hooks/useFetch';
 
 function Transactions() {
-   const { currentAccount } = useContext(TransactionContext);
+   const { currentAccount, transactions, isLoading } = useContext(TransactionContext);
    
    return (
       <section className="w-full flex justify-center items-center 2xl:px-20 gradient-bg-transactions">

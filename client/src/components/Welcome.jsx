@@ -10,15 +10,7 @@ import shortenAddress from '../utils/shortenAddress';
 const commonStyles = 'min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white';
 
 function Welcome() {
-   const [isLoading, setIsLoading] = useState(false);
-   const {
-      connectWallet,
-      currentAccount,
-      formData,
-      setFormData,
-      handleChange,
-      sendTransaction,
-   } = useContext(TransactionContext);
+   const { connectWallet, currentAccount, formData, setFormData, handleChange, sendTransaction, isLoading } = useContext(TransactionContext);
    
    const handleSubmit = (e, name) => {
       e.preventDefault();
